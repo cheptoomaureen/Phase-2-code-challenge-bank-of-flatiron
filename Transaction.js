@@ -1,28 +1,29 @@
 import React from "react";
-import TransactionItem from './TransactionItem'
 
-function Transaction({transactions}) {
-  
+const Transaction = (props) => {
+
+  let { date, description, category, amount } = props.transaction;
+
+  let handleDelete = () => {
+    fetch(`http://localhost:8001/transactions/${props.transaction.id}`, {
+      method: 'DELETE',
+    })
+    .then(response => response.json())
+    .then(deletedTransaction => {
+      props.deleteTransactionFun(props.transaction);
+    })
+    .catch(error => console.error('Error deleting transaction:', error));
+  };
+
   return (
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Amount</th>
-        </tr>
-        {/* transaction item */}
-        {transactions.map(transaction=>{
-            return <TransactionItem
-            date={transaction.date}
-            description={transaction.description}
-            category={transaction.category}
-            amount={transaction.amount}
-            key={transaction.id}
-            />
-        })}
-    </table>
-  )
-}
+    <tr>
+      <td>{date}</td>
+      <td>{description}</td>
+      <td>{category}</td>
+      <td>{amount}</td>
+      <td><button onClick={handleDelete}>X</button></td> 
+    </tr>
+  );
+};
 
-export default Transaction
+export default Transaction;
