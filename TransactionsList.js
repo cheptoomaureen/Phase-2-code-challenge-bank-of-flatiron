@@ -3,17 +3,14 @@ import Transaction from "./Transaction";
 import Select from "./Select"
 
 const TransactionsList = (props) => {
-
-  let componentArray = props.transactions.map(transactionObj => {
+let componentArray = props.transactions.map(transactionObj => {
     return <Transaction 
             key={transactionObj.id} 
             transaction={transactionObj} 
             deleteTransactionFun={props.deleteTransactionFun}
           />
   })
-
-
-  return (
+ return (
     <table className="ui celled striped padded table">
       <tbody>
         <tr>
@@ -36,6 +33,5 @@ const TransactionsList = (props) => {
     </table>
   );
 };
-
 export default TransactionsList;
 
