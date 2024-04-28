@@ -2,6 +2,7 @@ import React, { useEffect, useState }  from "react";
 import AccountContainer from "./AccountContainer";
 import Transaction from "./components/Transaction.js";
 import SearchForm from "./components/SearchForm.js";
+import NewTransactionForm from "./components/NewTransactionForm";
 function App() {
   const [transactions, setTransactions] = useState([]);
   useEffect(() => {
@@ -11,15 +12,15 @@ function App() {
   }, []); 
   console.log(transactions);
 
-  function handleUpdateOnSubmission(newtransaction) {
-    console.log(newtransaction);
-    setTransactions((transactions) => [...transactions, newtransaction]);
+  function handleUpdateOnSubmission(Newtransaction) {
+    console.log(Newtransaction);
+    setTransactions((transactions) => [...transactions, Newtransaction]);
     const serverOptions = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newtransaction),
+      body: JSON.stringify(Newtransaction),
     };
     fetch("https://bank-flatiron-data.onrender.com/transactions", serverOptions)
     .then((r) => r.json())
@@ -39,7 +40,7 @@ function App() {
         <h2>The Royal Bank of Flatiron</h2>
       </div>
       <SearchForm onSearching={handleSearching} />
-      <newTransactionForm onSubmission={handleUpdateOnSubmission} />
+      <NewTransactionForm onSubmission={handleUpdateOnSubmission} />
       <Transaction transactions={transactions} />
       <AccountContainer />
     </div>
