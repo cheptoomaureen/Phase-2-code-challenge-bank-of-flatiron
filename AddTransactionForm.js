@@ -1,39 +1,86 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
+class AddTransactionForm extends Component {
 
-function AddTransactionForm() {
-  const [date, setDate] = useState("")
-  const [description, setDescription] = useState("")
-  const [category, setCategory] = useState("")
-  const [amount, setAmount] = useState("")
-  function handleSubmit(e) {
-    fetch("http://localhost:8001/transactions", {
+  state = {
+    date: "",
+    description: "",
+    category: "",
+    amount: ""
+  }
+ handleSubmit = (evt) => {
+    evt.preventDefault()
+    fetch('http://localhost:8001/transactions', {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        'content-type': 'application/json'
       },
       body: JSON.stringify({
-        date: date,
-        description: description,
-        category: category,
-        amount: amount,
-      }),
-    });
-     alert("added successfully")
+        date: this.state.date,
+        description: this.state.description,
+        category: this.state.category,
+        amount: this.state.amount
+      })
+    })
+    .then(r => r.json())
+    .then(addTransaction => {
+      this.props.addTransactionFun(addTransaction)
+      this.setState({
+        date: "",
+        description: "",
+        category: "",
+        amount: ""
+      })
+    })
+
   }
-  return (
-    <div className="ui segment">
-      <form onSubmit={handleSubmit} className="ui form">
-        <div className="inline fields">
-        <input value={date} onChange={(e) => setDate(e.target.value)} type="date" name="date" />
-          <input value={description} onChange={(e) => setDescription(e.target.value)} type="text" name="description" placeholder="Description" />
-          <input value={category} onChange={(e) => setCategory(e.target.value)} type="text" name="category" placeholder="Category" />
-          <input value={amount} onChange={(e) => setAmount(e.target.value)} type="number" name="amount" placeholder="Amount" step="0.01" />
-        </div>
-        <button className="ui button" type="submit">
-          Add Transaction
-        </button>
-      </form>
-    </div>
-  );
+
+  handleChange = (evt) => {
+    this.setState({
+      [evt.target.name] : evt.target.value
+    })
+  }
+
+  render() {
+return (
+      <div className="ui segment">
+        <form className="ui form" onSubmit={this.handleSubmit}>
+          <div className="inline fields">
+            <input 
+              type="date" 
+              name="date" 
+              value={this.state.date}
+              onChange={this.handleChange}
+            />
+            <input 
+              type="text" 
+              name="description" 
+              placeholder="Description" 
+              value={this.state.description}
+              onChange={this.handleChange}
+            />
+            <input 
+              type="text" 
+              name="category" 
+              placeholder="Category" 
+              value={this.state.category}
+              onChange={this.handleChange}
+            />
+            <input
+              type="number"
+              name="amount"
+              placeholder="Amount"
+              step="0.01"
+              value={this.state.amount}
+              onChange={this.handleChange}
+            />
+          </div>
+          <button className="ui button" type="submit" > 
+            Add Transaction
+          </button>
+        </form>
+      </div>
+    );
+  }
 }
+
 export default AddTransactionForm;
